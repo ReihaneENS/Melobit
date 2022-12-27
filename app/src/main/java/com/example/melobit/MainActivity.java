@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         results =  findViewById(R.id.results);
         rvLatestSongs = findViewById(R.id.rv_latest_songs);
 
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvLatestSongs.setLayoutManager(layoutManager);
         Moshi moshi = new Moshi.Builder().build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         ApiService apiService = retrofit.create(ApiService.class);
 
         Call<com.example.melobit.data.Response> call = apiService.getLatestSongs();
-        rvLatestSongs.setLayoutManager(new LinearLayoutManager(this));
+
         call.enqueue(new Callback<com.example.melobit.data.Response>() {
             @Override
             public void onResponse(Call<com.example.melobit.data.Response> call, Response<com.example.melobit.data.Response> response) {

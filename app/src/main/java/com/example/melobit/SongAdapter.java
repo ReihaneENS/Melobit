@@ -34,11 +34,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
         holder.tvTitle.setText(songs.get(position).getTitle());
         List<ArtistsItem> artists = songs.get(position).getArtists();
-        String names = "";
-        for (ArtistsItem artist : artists){
-            names += artist.getFullName();
-        }
-        holder.tvSinger.setText(names);
+        holder.tvSinger.setText(songs.get(position).getArtists().get(0).getFullName());
         Glide.with(context)
                 .load(songs.get(position).getImage().getCover().getUrl())
                 .into(holder.ivCover);
