@@ -3,19 +3,19 @@ package com.example.melobit.data;
 import java.util.List;
 import com.squareup.moshi.Json;
 
-public class Response{
+public class ArtistResponse{
 
 	@Json(name = "total")
 	private int total;
 
 	@Json(name = "results")
-	private List<Song> results;
+	private List<Artist> results;
 
 	public int getTotal(){
 		return total;
 	}
 
-	public List<Song> getResults(){
+	public List<Artist> getResults(){
 		return results;
 	}
 }

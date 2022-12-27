@@ -2,7 +2,7 @@ package com.example.melobit.data;
 
 import com.squareup.moshi.Json;
 
-public class ArtistsItem{
+public class Artist {
 
 	@Json(name = "image")
 	private Image image;
