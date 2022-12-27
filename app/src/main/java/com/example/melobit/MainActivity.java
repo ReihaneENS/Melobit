@@ -1,13 +1,13 @@
 package com.example.melobit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.melobit.data.Song;
 import com.squareup.moshi.Moshi;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,6 +18,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private TextView results;
+    private RecyclerView rvLatestSongs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         results =  findViewById(R.id.results);
+        rvLatestSongs = findViewById(R.id.rv_latest_songs);
 
         Moshi moshi = new Moshi.Builder().build();
 
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         ApiService apiService = retrofit.create(ApiService.class);
 
         Call<com.example.melobit.data.Response> call = apiService.getLatestSongs();
-
+        rvLatestSongs.setLayoutManager(new LinearLayoutManager(this));
         call.enqueue(new Callback<com.example.melobit.data.Response>() {
             @Override
             public void onResponse(Call<com.example.melobit.data.Response> call, Response<com.example.melobit.data.Response> response) {
@@ -45,9 +47,8 @@ public class MainActivity extends AppCompatActivity {
                      return;
                  }
                 com.example.melobit.data.Response  songs = response.body();
-                 String content ="";
-                 content += songs.getResults().get(0).getTitle() + " TAB";
-                 results.append(content);
+                rvLatestSongs.setAdapter(new SongAdapter(getApplicationContext(),songs.getResults()));
+
             }
 
             @Override
