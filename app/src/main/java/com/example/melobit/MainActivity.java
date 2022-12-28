@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView results;
     private RecyclerView rvLatestSongs,rvTopSingers;
-    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         results =  findViewById(R.id.results);
         rvLatestSongs = findViewById(R.id.rv_latest_songs);
         rvTopSingers = findViewById(R.id.rv_top_singers);
-        viewPager = findViewById(R.id.view_pager);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -77,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 SongResponse sliders = response.body();
-                viewPager.setAdapter(new SliderAdapter(MainActivity.this,sliders.getResults()));
+                //viewPager.setAdapter(new SliderAdapter(MainActivity.this,sliders.getResults()));
             }
 
             @Override
