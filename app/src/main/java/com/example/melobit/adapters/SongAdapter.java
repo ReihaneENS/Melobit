@@ -1,4 +1,4 @@
-package com.example.melobit;
+package com.example.melobit.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.melobit.R;
 import com.example.melobit.data.Artist;
 import com.example.melobit.data.Song;
 

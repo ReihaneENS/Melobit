@@ -3,11 +3,12 @@ package com.example.melobit;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.melobit.adapters.ArtistAdapter;
+import com.example.melobit.adapters.SongAdapter;
 import com.example.melobit.data.ArtistResponse;
 import com.example.melobit.data.SongResponse;
 

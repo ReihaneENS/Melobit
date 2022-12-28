@@ -1,4 +1,4 @@
-package com.example.melobit;
+package com.example.melobit.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
+import com.example.melobit.R;
 import com.example.melobit.data.Song;
 
 import java.util.List;
