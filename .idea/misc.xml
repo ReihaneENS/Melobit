@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/WIN10/AndroidStudioProjects/Melobit/app/src/main/res/drawable/ic_baseline_music_note_24.xml" value="0.2045" />
+        <entry key="..\:/Users/WIN10/AndroidStudioProjects/Melobit/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1865" />
+        <entry key="..\:/Users/WIN10/AndroidStudioProjects/Melobit/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/Melobit/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/WIN10/AndroidStudioProjects/Melobit/app/src/main/res/layout/activity_splash.xml" value="0.2" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/Melobit/app/src/main/res/layout/artist_view_item.xml" value="0.23802083333333332" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/Melobit/app/src/main/res/layout/slider_item_view.xml" value="0.2" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/Melobit/app/src/main/res/layout/song_item_view.xml" value="0.4" />
