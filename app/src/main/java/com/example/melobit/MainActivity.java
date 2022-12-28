@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.melobit.data.ArtistResponse;
 import com.example.melobit.data.SongsResponse;
 import com.squareup.moshi.Moshi;
 
@@ -20,7 +21,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private TextView results;
-    private RecyclerView rvLatestSongs;
+    private RecyclerView rvLatestSongs,rvTopSingers;
     private ViewPager viewPager;
 
     @Override
@@ -30,11 +31,15 @@ public class MainActivity extends AppCompatActivity {
 
         results =  findViewById(R.id.results);
         rvLatestSongs = findViewById(R.id.rv_latest_songs);
+        rvTopSingers = findViewById(R.id.rv_top_singers);
         viewPager = findViewById(R.id.view_pager);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvLatestSongs.setLayoutManager(layoutManager);
+        LinearLayoutManager layoutManager1
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvTopSingers.setLayoutManager(layoutManager1);
 
         Moshi moshi = new Moshi.Builder().build();
         Retrofit retrofit = new Retrofit.Builder()
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         Call<SongsResponse> call = apiService.getLatestSongs();
         Call<SongsResponse> sliderSongs = apiService.getLatestSliders();
+        Call<ArtistResponse> topSingers = apiService.getTrendingArtists();
 
         call.enqueue(new Callback<SongsResponse>() {
             @Override
@@ -78,6 +84,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SongsResponse> call, Throwable t) {
+                results.setText(t.getMessage());
+            }
+        });
+        topSingers.enqueue(new Callback<ArtistResponse>() {
+            @Override
+            public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> response) {
+                if (!response.isSuccessful()){
+                    results.setText("Code: "+response.code());
+                    return;
+                }
+                ArtistResponse artists = response.body();
+                rvTopSingers.setAdapter(new ArtistAdapter(MainActivity.this,artists.getResults()));
+            }
+
+            @Override
+            public void onFailure(Call<ArtistResponse> call, Throwable t) {
                 results.setText(t.getMessage());
             }
         });
