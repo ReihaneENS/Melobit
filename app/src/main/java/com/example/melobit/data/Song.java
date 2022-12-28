@@ -1,44 +1,44 @@
 package com.example.melobit.data;
 
 import java.util.List;
-import com.squareup.moshi.Json;
+import com.google.gson.annotations.SerializedName;
 
 public class Song {
 
-	@Json(name = "duration")
+	@SerializedName("duration")
 	private int duration;
 
-	@Json(name = "hasVideo")
+	@SerializedName("hasVideo")
 	private boolean hasVideo;
 
-	@Json(name = "copyrighted")
+	@SerializedName("copyrighted")
 	private boolean copyrighted;
 
-	@Json(name = "image")
+	@SerializedName("image")
 	private Image image;
 
-	@Json(name = "artists")
+	@SerializedName("artists")
 	private List<Artist> artists;
 
-	@Json(name = "releaseDate")
+	@SerializedName("releaseDate")
 	private String releaseDate;
 
-	@Json(name = "album")
+	@SerializedName("album")
 	private Album album;
 
-	@Json(name = "localized")
+	@SerializedName("localized")
 	private boolean localized;
 
-	@Json(name = "id")
+	@SerializedName("id")
 	private String id;
 
-	@Json(name = "audio")
+	@SerializedName("audio")
 	private Audio audio;
 
-	@Json(name = "title")
+	@SerializedName("title")
 	private String title;
 
-	@Json(name = "downloadCount")
+	@SerializedName("downloadCount")
 	private String downloadCount;
 
 	public int getDuration(){

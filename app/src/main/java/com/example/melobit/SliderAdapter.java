@@ -11,7 +11,6 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.example.melobit.data.Song;
-import com.example.melobit.data.SongsResponse;
 
 import java.util.List;
 

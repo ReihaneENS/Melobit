@@ -1,25 +1,25 @@
 package com.example.melobit.data;
 
-import com.squareup.moshi.Json;
+import com.google.gson.annotations.SerializedName;
 
 public class Artist {
 
-	@Json(name = "image")
+	@SerializedName("image")
 	private Image image;
 
-	@Json(name = "fullName")
+	@SerializedName("fullName")
 	private String fullName;
 
-	@Json(name = "sumSongsDownloadsCount")
+	@SerializedName("sumSongsDownloadsCount")
 	private String sumSongsDownloadsCount;
 
-	@Json(name = "id")
+	@SerializedName("id")
 	private String id;
 
-	@Json(name = "followersCount")
+	@SerializedName("followersCount")
 	private int followersCount;
 
-	@Json(name = "type")
+	@SerializedName("type")
 	private String type;
 
 	public Image getImage(){

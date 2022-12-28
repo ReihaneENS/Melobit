@@ -1,14 +1,14 @@
 package com.example.melobit.data;
 
 import java.util.List;
-import com.squareup.moshi.Json;
+import com.google.gson.annotations.SerializedName;
 
-public class SongsResponse {
+public class SongResponse{
 
-	@Json(name = "total")
+	@SerializedName("total")
 	private int total;
 
-	@Json(name = "results")
+	@SerializedName("results")
 	private List<Song> results;
 
 	public int getTotal(){

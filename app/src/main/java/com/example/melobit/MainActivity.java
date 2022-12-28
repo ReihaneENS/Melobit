@@ -9,14 +9,13 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.melobit.data.ArtistResponse;
-import com.example.melobit.data.SongsResponse;
-import com.squareup.moshi.Moshi;
+import com.example.melobit.data.SongResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.moshi.MoshiConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,49 +40,48 @@ public class MainActivity extends AppCompatActivity {
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvTopSingers.setLayoutManager(layoutManager1);
 
-        Moshi moshi = new Moshi.Builder().build();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api-beta.melobit.com/v1/")
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
 
 
 
-        Call<SongsResponse> call = apiService.getLatestSongs();
-        Call<SongsResponse> sliderSongs = apiService.getLatestSliders();
+        Call<SongResponse> call = apiService.getLatestSongs();
+        Call<SongResponse> sliderSongs = apiService.getLatestSliders();
         Call<ArtistResponse> topSingers = apiService.getTrendingArtists();
 
-        call.enqueue(new Callback<SongsResponse>() {
+        call.enqueue(new Callback<SongResponse>() {
             @Override
-            public void onResponse(Call<SongsResponse> call, Response<SongsResponse> response) {
+            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
                  if (!response.isSuccessful()){
                      results.setText("Code: "+response.code());
                      return;
                  }
-                SongsResponse songs = response.body();
+                SongResponse songs = response.body();
                 rvLatestSongs.setAdapter(new SongAdapter(getApplicationContext(),songs.getResults()));
 
             }
 
             @Override
-            public void onFailure(Call<SongsResponse> call, Throwable t) {
+            public void onFailure(Call<SongResponse> call, Throwable t) {
                     results.setText(t.getMessage());
             }
         });
-        sliderSongs.enqueue(new Callback<SongsResponse>() {
+        sliderSongs.enqueue(new Callback<SongResponse>() {
             @Override
-            public void onResponse(Call<SongsResponse> call, Response<SongsResponse> response) {
+            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
                 if (!response.isSuccessful()){
                     results.setText("Code: "+response.code());
                     return;
                 }
-                SongsResponse sliders = response.body();
+                SongResponse sliders = response.body();
                 viewPager.setAdapter(new SliderAdapter(MainActivity.this,sliders.getResults()));
             }
 
             @Override
-            public void onFailure(Call<SongsResponse> call, Throwable t) {
+            public void onFailure(Call<SongResponse> call, Throwable t) {
                 results.setText(t.getMessage());
             }
         });

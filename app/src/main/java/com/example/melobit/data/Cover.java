@@ -1,10 +1,10 @@
 package com.example.melobit.data;
 
-import com.squareup.moshi.Json;
+import com.google.gson.annotations.SerializedName;
 
 public class Cover{
 
-	@Json(name = "url")
+	@SerializedName("url")
 	private String url;
 
 	public String getUrl(){

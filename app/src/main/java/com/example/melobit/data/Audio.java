@@ -1,13 +1,13 @@
 package com.example.melobit.data;
 
-import com.squareup.moshi.Json;
+import com.google.gson.annotations.SerializedName;
 
 public class Audio{
 
-	@Json(name = "high")
+	@SerializedName("high")
 	private High high;
 
-	@Json(name = "medium")
+	@SerializedName("medium")
 	private Medium medium;
 
 	public High getHigh(){

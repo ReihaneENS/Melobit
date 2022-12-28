@@ -1,20 +1,20 @@
 package com.example.melobit.data;
 
 import java.util.List;
-import com.squareup.moshi.Json;
+import com.google.gson.annotations.SerializedName;
 
 public class Album{
 
-	@Json(name = "image")
+	@SerializedName("image")
 	private Image image;
 
-	@Json(name = "artists")
+	@SerializedName("artists")
 	private List<Artist> artists;
 
-	@Json(name = "releaseDate")
+	@SerializedName("releaseDate")
 	private String releaseDate;
 
-	@Json(name = "name")
+	@SerializedName("name")
 	private String name;
 
 	public Image getImage(){

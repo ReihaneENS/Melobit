@@ -1,22 +1,22 @@
 package com.example.melobit.data;
 
-import com.squareup.moshi.Json;
+import com.google.gson.annotations.SerializedName;
 
 public class Image{
 
-	@Json(name = "thumbnail_small")
+	@SerializedName("thumbnail_small")
 	private ThumbnailSmall thumbnailSmall;
 
-	@Json(name = "cover")
+	@SerializedName("cover")
 	private Cover cover;
 
-	@Json(name = "thumbnail")
+	@SerializedName("thumbnail")
 	private Thumbnail thumbnail;
 
-	@Json(name = "cover_small")
+	@SerializedName("cover_small")
 	private CoverSmall coverSmall;
 
-	@Json(name = "slider")
+	@SerializedName("slider")
 	private Slider slider;
 
 	public ThumbnailSmall getThumbnailSmall(){
