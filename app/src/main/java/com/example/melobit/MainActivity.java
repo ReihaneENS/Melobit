@@ -3,6 +3,7 @@ package com.example.melobit;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.melobit.adapters.ArtistAdapter;
+import com.example.melobit.adapters.SliderAdapter;
 import com.example.melobit.adapters.SongAdapter;
 import com.example.melobit.data.ArtistResponse;
 import com.example.melobit.data.SongResponse;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView results;
     private RecyclerView rvLatestSongs, rvTopSingers;
     private Button hitsBtn;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         rvLatestSongs = findViewById(R.id.rv_latest_songs);
         rvTopSingers = findViewById(R.id.rv_top_singers);
         hitsBtn = findViewById(R.id.button);
+        viewPager = findViewById(R.id.view_pager);
 
         hitsBtn.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, HitsActivity.class);
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 SongResponse sliders = response.body();
-                //viewPager.setAdapter(new SliderAdapter(MainActivity.this,sliders.getResults()));
+                viewPager.setAdapter(new SliderAdapter(MainActivity.this,sliders.getResults()));
             }
 
             @Override

@@ -26,8 +26,6 @@ public class HitsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hits);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         rvTodayHits = findViewById(R.id.rv_today);
         rvThisWeekHits = findViewById(R.id.rv_this_week);
 
