@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.melobit.data.Song;
+
 public class SongActivity extends AppCompatActivity {
 
     @Override
@@ -15,7 +17,18 @@ public class SongActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String value = extras.getString("id");
-            tv.setText(value);
+            RequestManager manager = new RequestManager(this);
+            SongRequestListener listener = new SongRequestListener() {
+                @Override
+                public void didFetch(Song response) {
+                    //set up media player
+                }
+                @Override
+                public void didError(String errorMessage) {
+                    tv.setText(errorMessage);
+                }
+            };
+            manager.getSongById(listener,value);
         }
     }
 }

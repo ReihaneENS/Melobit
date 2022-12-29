@@ -3,6 +3,7 @@ package com.example.melobit;
 import android.content.Context;
 
 import com.example.melobit.data.ArtistResponse;
+import com.example.melobit.data.Song;
 import com.example.melobit.data.SongResponse;
 
 import retrofit2.Call;
@@ -111,6 +112,23 @@ public class RequestManager {
             }
         });
     }
+    public void getSongById(SongRequestListener listener,String id){
+        Call<Song> song = apiService.getSongById(id);
+        song.enqueue(new Callback<Song>() {
+            @Override
+            public void onResponse(Call<Song> call, Response<Song> response) {
+                if (!response.isSuccessful()){
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body());
+            }
+            @Override
+            public void onFailure(Call<Song> call, Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
 }
 interface SongListRequestListener {
     void didFetch(SongResponse response);
@@ -118,6 +136,10 @@ interface SongListRequestListener {
 }
 interface ArtistsRequestListener {
     void didFetch(ArtistResponse response);
+    void didError(String errorMessage);
+}
+interface SongRequestListener {
+    void didFetch(Song response);
     void didError(String errorMessage);
 }
 
