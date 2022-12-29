@@ -1,15 +1,14 @@
 package com.example.melobit;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.melobit.adapters.ArtistAdapter;
 import com.example.melobit.adapters.SliderAdapter;
@@ -17,17 +16,10 @@ import com.example.melobit.adapters.SongAdapter;
 import com.example.melobit.data.ArtistResponse;
 import com.example.melobit.data.SongResponse;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class MainActivity extends AppCompatActivity {
 
     private TextView results;
     private RecyclerView rvLatestSongs, rvTopSingers;
-    private Button hitsBtn;
     private ViewPager viewPager;
 
     @Override
@@ -38,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         results = findViewById(R.id.results);
         rvLatestSongs = findViewById(R.id.rv_latest_songs);
         rvTopSingers = findViewById(R.id.rv_top_singers);
-        hitsBtn = findViewById(R.id.button);
         viewPager = findViewById(R.id.view_pager);
+        Button hitsBtn = findViewById(R.id.button);
 
         hitsBtn.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, HitsActivity.class);
@@ -53,67 +45,40 @@ public class MainActivity extends AppCompatActivity {
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvTopSingers.setLayoutManager(layoutManager1);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api-beta.melobit.com/v1/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        ApiService apiService = retrofit.create(ApiService.class);
+        RequestManager manager = new RequestManager(this);
 
-
-        Call<SongResponse> call = apiService.getLatestSongs();
-        Call<SongResponse> sliderSongs = apiService.getLatestSliders();
-        Call<ArtistResponse> topSingers = apiService.getTrendingArtists();
-
-        call.enqueue(new Callback<SongResponse>() {
+        SongListRequestListener latestListener = new SongListRequestListener() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
-                if (!response.isSuccessful()) {
-                    results.setText("Code: " + response.code());
-                    return;
-                }
-                SongResponse songs = response.body();
-                rvLatestSongs.setAdapter(new SongAdapter(getApplicationContext(), songs.getResults()));
-
+            public void didFetch(SongResponse response) {
+                rvLatestSongs.setAdapter(new SongAdapter(getApplicationContext(),response.getResults()));
             }
-
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
-                results.setText(t.getMessage());
+            public void didError(String errorMessage) {
+                results.setText(errorMessage);
             }
-        });
-        sliderSongs.enqueue(new Callback<SongResponse>() {
+        };
+        SongListRequestListener sliderListener = new SongListRequestListener() {
             @Override
-            public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
-                if (!response.isSuccessful()) {
-                    results.setText("Code: " + response.code());
-                    return;
-                }
-                SongResponse sliders = response.body();
-                viewPager.setAdapter(new SliderAdapter(MainActivity.this,sliders.getResults()));
+            public void didFetch(SongResponse response) {
+                viewPager.setAdapter(new SliderAdapter(MainActivity.this,response.getResults()));
             }
-
             @Override
-            public void onFailure(Call<SongResponse> call, Throwable t) {
-                results.setText(t.getMessage());
+            public void didError(String errorMessage) {
+                results.setText(errorMessage);
             }
-        });
-        topSingers.enqueue(new Callback<ArtistResponse>() {
+        };
+        ArtistsRequestListener artistsListener = new ArtistsRequestListener() {
             @Override
-            public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> response) {
-                if (!response.isSuccessful()) {
-                    results.setText("Code: " + response.code());
-                    return;
-                }
-                ArtistResponse artists = response.body();
-                rvTopSingers.setAdapter(new ArtistAdapter(MainActivity.this, artists.getResults()));
+            public void didFetch(ArtistResponse response) {
+                rvTopSingers.setAdapter(new ArtistAdapter(MainActivity.this, response.getResults()));
             }
-
             @Override
-            public void onFailure(Call<ArtistResponse> call, Throwable t) {
-                results.setText(t.getMessage());
+            public void didError(String errorMessage) {
+                results.setText(errorMessage);
             }
-        });
-
-
+        };
+        manager.getLatestSongs(latestListener);
+        manager.getTrendingArtist(artistsListener);
+        manager.getSliders(sliderListener);
     }
 }
