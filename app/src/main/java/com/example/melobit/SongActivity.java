@@ -1,9 +1,9 @@
 package com.example.melobit;
 
+import android.annotation.SuppressLint;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +16,8 @@ import com.bumptech.glide.Glide;
 import com.example.melobit.data.Song;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SongActivity extends AppCompatActivity {
 
@@ -24,6 +26,7 @@ public class SongActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     SeekBar seekBar;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,17 +76,16 @@ public class SongActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Handler mHandler = new Handler();
-        SongActivity.this.runOnUiThread(new Runnable() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if(mediaPlayer != null){
-                    int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
-                    seekBar.setProgress(mCurrentPosition);
+                try {
+                    seekBar.setProgress(mediaPlayer.getCurrentPosition()/1000);
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
-                mHandler.postDelayed(this, 1000);
-            }
-        });
+            }}, 0, 1000);
+
         btnPlay.setOnClickListener(v -> {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
@@ -101,11 +103,9 @@ public class SongActivity extends AppCompatActivity {
         });
     }
     @Override
-    protected void onDestroy() {
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        }
-        super.onDestroy();
+    public void onBackPressed() {
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        super.onBackPressed();
     }
 }
