@@ -16,7 +16,7 @@ import com.example.melobit.adapters.SongAdapter;
 import com.example.melobit.data.ArtistResponse;
 import com.example.melobit.data.SongResponse;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private TextView results;
     private RecyclerView rvLatestSongs, rvTopSingers;
@@ -50,7 +50,11 @@ public class MainActivity extends AppCompatActivity {
         SongListRequestListener latestListener = new SongListRequestListener() {
             @Override
             public void didFetch(SongResponse response) {
-                rvLatestSongs.setAdapter(new SongAdapter(getApplicationContext(),response.getResults()));
+                rvLatestSongs.setAdapter(new SongAdapter(getApplicationContext(), response.getResults(), (position, v,id) -> {
+                    Intent intent = new Intent(MainActivity.this,SongActivity.class);
+                    intent.putExtra("id",id);
+                    startActivity(intent);
+                }));
             }
             @Override
             public void didError(String errorMessage) {

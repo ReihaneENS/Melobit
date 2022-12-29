@@ -1,6 +1,8 @@
 package com.example.melobit;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +14,7 @@ import com.example.melobit.data.SongResponse;
 
 public class HitsActivity extends AppCompatActivity {
 
-    private RecyclerView rvTodayHits,rvThisWeekHits;
+    private RecyclerView rvTodayHits, rvThisWeekHits;
     private TextView tvError;
 
     @Override
@@ -34,8 +36,17 @@ public class HitsActivity extends AppCompatActivity {
         SongListRequestListener todayListener = new SongListRequestListener() {
             @Override
             public void didFetch(SongResponse response) {
-                rvTodayHits.setAdapter(new SongAdapter(HitsActivity.this,response.getResults()));
+                rvTodayHits.setAdapter(new SongAdapter(HitsActivity.this, response.getResults(),
+                        new SongAdapter.ClickListener() {
+                            @Override
+                            public void onSongClick(int position, View v, String id) {
+                                Intent intent = new Intent(HitsActivity.this, SongActivity.class);
+                                intent.putExtra("id", id);
+                                startActivity(intent);
+                            }
+                        }));
             }
+
             @Override
             public void didError(String errorMessage) {
                 tvError.setText(errorMessage);
@@ -44,7 +55,12 @@ public class HitsActivity extends AppCompatActivity {
         SongListRequestListener thisWeekListener = new SongListRequestListener() {
             @Override
             public void didFetch(SongResponse response) {
-                rvThisWeekHits.setAdapter(new SongAdapter(HitsActivity.this,response.getResults()));
+                rvThisWeekHits.setAdapter(new SongAdapter(HitsActivity.this, response.getResults(),
+                        (position, v, id) -> {
+                            Intent intent = new Intent(HitsActivity.this, SongActivity.class);
+                            intent.putExtra("id", id);
+                            startActivity(intent);
+                        }));
             }
 
             @Override
