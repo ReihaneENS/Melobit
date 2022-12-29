@@ -6,6 +6,8 @@ import com.example.melobit.data.ArtistResponse;
 import com.example.melobit.data.Song;
 import com.example.melobit.data.SongResponse;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -121,7 +123,11 @@ public class RequestManager {
                     listener.didError(response.message());
                     return;
                 }
-                listener.didFetch(response.body());
+                try {
+                    listener.didFetch(response.body());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             @Override
             public void onFailure(Call<Song> call, Throwable t) {
@@ -139,7 +145,7 @@ interface ArtistsRequestListener {
     void didError(String errorMessage);
 }
 interface SongRequestListener {
-    void didFetch(Song response);
+    void didFetch(Song response) throws IOException;
     void didError(String errorMessage);
 }
 
