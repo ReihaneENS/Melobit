@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.melobit.adapters.ArtistAdapter;
@@ -21,16 +24,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private TextView results;
-    private RecyclerView rvLatestSongs,rvTopSingers;
+    private RecyclerView rvLatestSongs, rvTopSingers;
+    private Button hitsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        results =  findViewById(R.id.results);
+        results = findViewById(R.id.results);
         rvLatestSongs = findViewById(R.id.rv_latest_songs);
         rvTopSingers = findViewById(R.id.rv_top_singers);
+        hitsBtn = findViewById(R.id.button);
+
+        hitsBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, HitsActivity.class);
+            startActivity(intent);
+        });
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -46,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         ApiService apiService = retrofit.create(ApiService.class);
 
 
-
         Call<SongResponse> call = apiService.getLatestSongs();
         Call<SongResponse> sliderSongs = apiService.getLatestSliders();
         Call<ArtistResponse> topSingers = apiService.getTrendingArtists();
@@ -54,25 +63,25 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<SongResponse>() {
             @Override
             public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
-                 if (!response.isSuccessful()){
-                     results.setText("Code: "+response.code());
-                     return;
-                 }
+                if (!response.isSuccessful()) {
+                    results.setText("Code: " + response.code());
+                    return;
+                }
                 SongResponse songs = response.body();
-                rvLatestSongs.setAdapter(new SongAdapter(getApplicationContext(),songs.getResults()));
+                rvLatestSongs.setAdapter(new SongAdapter(getApplicationContext(), songs.getResults()));
 
             }
 
             @Override
             public void onFailure(Call<SongResponse> call, Throwable t) {
-                    results.setText(t.getMessage());
+                results.setText(t.getMessage());
             }
         });
         sliderSongs.enqueue(new Callback<SongResponse>() {
             @Override
             public void onResponse(Call<SongResponse> call, Response<SongResponse> response) {
-                if (!response.isSuccessful()){
-                    results.setText("Code: "+response.code());
+                if (!response.isSuccessful()) {
+                    results.setText("Code: " + response.code());
                     return;
                 }
                 SongResponse sliders = response.body();
@@ -87,12 +96,12 @@ public class MainActivity extends AppCompatActivity {
         topSingers.enqueue(new Callback<ArtistResponse>() {
             @Override
             public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> response) {
-                if (!response.isSuccessful()){
-                    results.setText("Code: "+response.code());
+                if (!response.isSuccessful()) {
+                    results.setText("Code: " + response.code());
                     return;
                 }
                 ArtistResponse artists = response.body();
-                rvTopSingers.setAdapter(new ArtistAdapter(MainActivity.this,artists.getResults()));
+                rvTopSingers.setAdapter(new ArtistAdapter(MainActivity.this, artists.getResults()));
             }
 
             @Override
@@ -100,5 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 results.setText(t.getMessage());
             }
         });
+
+
     }
 }
