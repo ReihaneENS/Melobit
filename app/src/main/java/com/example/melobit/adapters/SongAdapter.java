@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.melobit.R;
-import com.example.melobit.data.Artist;
 import com.example.melobit.data.Song;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
 
     Context context;
     List<Song> songs;
-    private ClickListener clickListener;
+    private final ClickListener clickListener;
 
     public class SongViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView ivCover;

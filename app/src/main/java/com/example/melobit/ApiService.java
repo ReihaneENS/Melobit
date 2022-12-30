@@ -28,9 +28,4 @@ public interface ApiService {
 
     @GET("song/{id}")
     Call<Song> getSongById(@Path("id") String songId);
-
-    @GET("search/query/{query}/0/50")
-    Call<SongResponse> search(@Path("query") String query);
-
-
 }
