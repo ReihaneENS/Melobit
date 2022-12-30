@@ -5,10 +5,12 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.melobit.data.ArtistResponse;
+import com.example.melobit.data.SearchResponse;
 import com.example.melobit.data.Song;
 import com.example.melobit.data.SongResponse;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -148,11 +150,39 @@ public class RequestManager {
             }
         });
     }
+    public void search(SearchResultsListener listener, String query) {
+        Call<SearchResponse> songs = apiService.search(query);
+        songs.enqueue(new Callback<SearchResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<SearchResponse> call, @NonNull Response<SearchResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                List<Song> songs = null;
+                for (int i=0;i<response.body().getResults().size();i++){
+                    if (response.body().getResults().get(i).getType()=="song"){
+                        songs.add(response.body().getResults().get(i).getSong());
+                    }
+                }
+                listener.didFetch(songs);
+            }
+            @Override
+            public void onFailure(@NonNull Call<SearchResponse> call, @NonNull Throwable t) {
+                listener.didError(t.getMessage());
+            }
+        });
+    }
+
 
 }
-
 interface SongListRequestListener {
     void didFetch(SongResponse response);
+
+    void didError(String errorMessage);
+}
+interface SearchResultsListener {
+    void didFetch(List<Song> response);
 
     void didError(String errorMessage);
 }

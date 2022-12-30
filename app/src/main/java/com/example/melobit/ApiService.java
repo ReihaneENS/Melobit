@@ -1,11 +1,16 @@
 package com.example.melobit;
 
 
+import androidx.annotation.NonNull;
+
 import com.example.melobit.data.ArtistResponse;
+import com.example.melobit.data.SearchResponse;
 import com.example.melobit.data.Song;
 import com.example.melobit.data.SongResponse;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
@@ -28,4 +33,7 @@ public interface ApiService {
 
     @GET("song/{id}")
     Call<Song> getSongById(@Path("id") String songId);
+
+    @GET("search/query/{query}/0/50")
+    Call<SearchResponse> search(@Path("query") String query);
 }
