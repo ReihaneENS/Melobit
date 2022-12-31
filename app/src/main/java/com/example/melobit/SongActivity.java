@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.melobit.data.Song;
+import com.github.eloyzone.jalalicalendar.DateConverter;
+import com.github.eloyzone.jalalicalendar.JalaliDate;
+import com.github.eloyzone.jalalicalendar.JalaliDateFormatter;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -21,7 +24,7 @@ import java.util.TimerTask;
 
 public class SongActivity extends AppCompatActivity {
 
-    private TextView tvSongName, tvArtist;
+    private TextView tvSongName, tvArtist,tvPlayCount,tvReleaseDate;
     private ImageView btnPlay, ivCover;
     MediaPlayer mediaPlayer;
     SeekBar seekBar;
@@ -36,6 +39,8 @@ public class SongActivity extends AppCompatActivity {
         btnPlay = findViewById(R.id.btn_play);
         ivCover = findViewById(R.id.iv_cover);
         seekBar = findViewById(R.id.seekBar);
+        tvPlayCount = findViewById(R.id.tv_play_count);
+        tvReleaseDate = findViewById(R.id.tv_release_date);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -47,6 +52,8 @@ public class SongActivity extends AppCompatActivity {
                     playAudio(response.getAudio().getMedium().getUrl());
                     tvSongName.setText(response.getTitle());
                     tvArtist.setText(response.getArtists().get(0).getFullName());
+                    tvPlayCount.setText(response.getDownloadCount());
+                    tvReleaseDate.setText(miladiToShamsi(response.getReleaseDate()));
                     Glide.with(SongActivity.this)
                             .load(response.getImage().getCover().getUrl())
                             .into(ivCover);
@@ -65,6 +72,18 @@ public class SongActivity extends AppCompatActivity {
             });
         }
     }
+
+    private String miladiToShamsi(String releaseDate) {
+        String[] realeaseDate  = releaseDate.split("T");
+        String[] date = realeaseDate[0].split("-");
+        int year = Integer.parseInt(date[0]);
+        int month = Integer.parseInt(date[1]);
+        int day = Integer.parseInt(date[2]);
+        DateConverter dateConverter = new DateConverter();
+        JalaliDate jalaliDate = dateConverter.gregorianToJalali(year,month,day);
+        return jalaliDate.format(new JalaliDateFormatter("yyyy- M dd", JalaliDateFormatter.FORMAT_IN_PERSIAN));
+    }
+
     private void playAudio(String url) {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
