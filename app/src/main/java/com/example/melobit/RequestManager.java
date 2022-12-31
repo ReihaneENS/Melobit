@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.example.melobit.data.ArtistResponse;
 import com.example.melobit.data.SearchResponse;
+import com.example.melobit.data.SearchResultItem;
 import com.example.melobit.data.Song;
 import com.example.melobit.data.SongResponse;
 
@@ -151,21 +152,15 @@ public class RequestManager {
         });
     }
     public void search(SearchResultsListener listener, String query) {
-        Call<SearchResponse> songs = apiService.search(query);
-        songs.enqueue(new Callback<SearchResponse>() {
+        Call<SearchResponse> results = apiService.search(query);
+        results.enqueue(new Callback<SearchResponse>() {
             @Override
             public void onResponse(@NonNull Call<SearchResponse> call, @NonNull Response<SearchResponse> response) {
                 if (!response.isSuccessful()) {
                     listener.didError(response.message());
                     return;
                 }
-                List<Song> songs = null;
-                for (int i=0;i<response.body().getResults().size();i++){
-                    if (response.body().getResults().get(i).getType()=="song"){
-                        songs.add(response.body().getResults().get(i).getSong());
-                    }
-                }
-                listener.didFetch(songs);
+                listener.didFetch(response.body().getResults());
             }
             @Override
             public void onFailure(@NonNull Call<SearchResponse> call, @NonNull Throwable t) {
@@ -182,7 +177,7 @@ interface SongListRequestListener {
     void didError(String errorMessage);
 }
 interface SearchResultsListener {
-    void didFetch(List<Song> response);
+    void didFetch(List<SearchResultItem> response);
 
     void didError(String errorMessage);
 }
